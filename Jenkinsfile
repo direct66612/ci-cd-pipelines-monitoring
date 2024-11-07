@@ -5,7 +5,7 @@ pipeline {
         REPO_URL = 'https://github.com/direct66612/ci-cd-pipelines-monitoring'
         IMAGE_NAME = 'ci-cd-test-image'
         CONTAINER_NAME = 'ci-cd-test-container'
-        PORT = '8080'
+        PORT = '80'
     }
 
     stages {
