@@ -8,8 +8,8 @@ class MyHandler(SimpleHTTPRequestHandler):
         self.wfile.write(b"Hello, World! This is a simple HTTP server.")
 
 if __name__ == "__main__":
-    server_address = ("", 8080)
+    server_address = ("", 80)
     httpd = HTTPServer(server_address, MyHandler)
-    print("Server running on port 8080...")
+    print("Server running on port 80...")
     httpd.serve_forever()
 
