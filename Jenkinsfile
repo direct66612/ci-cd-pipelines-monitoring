@@ -39,17 +39,6 @@ pipeline {
             }
         }
 
-        stage('stop container and delete image') {
-            steps {
-                script {
-                    sh "docker stop ${CONTAINER_NAME} && docker rm ${CONTAINER_NAME}"
-
-                    sh "docker rmi ${IMAGE_NAME}"
-                }
-            }
-        }
-    }
-
     post {
         always {
             cleanWs()
