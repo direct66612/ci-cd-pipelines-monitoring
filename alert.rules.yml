@@ -1,21 +1,20 @@
 groups:
-  - name: container_alerts
-    rules:
-      - alert: HighCPUUsage
-        expr: 100 - avg by (instance) (rate(node_cpu_seconds_total{mode="idle"}[1m])) > 80
-        for: 2m
-        labels:
-          severity: critical
-        annotations:
-          description: "CPU usage is above 80% for more than 2 minutes."
-          summary: "High CPU usage detected."
-      
-      - alert: HighMemoryUsage
-        expr: (node_memory_MemTotal_bytes - node_memory_MemFree_bytes) / node_memory_MemTotal_bytes * 100 > 80
-        for: 2m
-        labels:
-          severity: critical
-        annotations:
-          description: "Memory usage is above 80% for more than 2 minutes."
-          summary: "High memory usage detected."
+- name: cadvisor_alerts
+  rules:
+  - alert: HighCPUUsage
+    expr: avg(rate(container_cpu_usage_seconds_total{container_name!="",container_name!="POD"}[1m])) by (container_name) > 0.9
+    for: 5m
+    labels:
+      severity: critical
+    annotations:
+      summary: "High CPU usage on container {{ $labels.container_name }}"
+      description: "The CPU usage for container {{ $labels.container_name }} has been over 90% for more than 5 minutes."
+  - alert: HighMemoryUsage
+  expr: container_memory_usage_bytes{container_name!="",container_name!="POD"} > (container_spec_memory_limit_bytes{container_name!="",container_name!="POD"} * 0.9)
+  for: 5m
+  labels:
+    severity: critical
+  annotations:
+    summary: "High memory usage on container {{ $labels.container_name }}"
+    description: "The memory usage for container {{ $labels.container_name }} has exceeded 90% of its limit for more than 5 minutes."
 
